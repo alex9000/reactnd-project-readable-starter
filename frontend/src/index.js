@@ -1,8 +1,7 @@
 import React from 'react';
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import { createStore, applyMiddleware, compose } from 'redux'
-import { fetchCategories, fetchPosts, fetchPostsIfNeeded } from './actions'
+import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducers';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -19,15 +18,6 @@ let store = createStore(
     thunkMiddleware // lets us dispatch() functions
   )
 );
-
-// store
-//   .dispatch(fetchCategories())
-
-// store
-//   .dispatch(fetchPosts())
-//
-//   store
-//     .dispatch(fetchPostsIfNeeded('react'))
 
 ReactDOM.render(
   <Root store={store} />,

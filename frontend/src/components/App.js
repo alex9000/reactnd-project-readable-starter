@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CategoriesList from './CategoriesList';
-import { fetchCategories } from '../actions'
+import { fetchCategories, fetchPostsIfNeeded  } from '../actions'
 import PostsList from './PostsList';
 import { connect } from 'react-redux'
 import { Grid, Row, Col} from 'react-bootstrap';
@@ -12,8 +12,9 @@ import { denormalize, schema } from 'normalizr';
 class App extends Component {
 
   componentDidMount() {
-   const { dispatch } = this.props
+   const { dispatch, selectedCategory } = this.props
    dispatch(fetchCategories())
+   dispatch(fetchPostsIfNeeded(selectedCategory))
  }
 
   render() {
@@ -22,7 +23,6 @@ class App extends Component {
     // denormalize posts
     if (entities.hasOwnProperty('posts') &&  entities.posts.hasOwnProperty('byId')){
       const postsById = entities.posts.byId;
-      //console.log('posts.ById', postsById)
       const post = new schema.Entity('posts');
       const mySchema = { posts: [ post ] }
       const postEntities = { posts: postsById };
@@ -58,10 +58,11 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, entities }, ownProps) => {
+const mapStateToProps = ({ categories, entities, selectedCategory }, ownProps) => {
   return {
     categories: categories,
-    entities
+    entities,
+    selectedCategory
   }
 }
 
