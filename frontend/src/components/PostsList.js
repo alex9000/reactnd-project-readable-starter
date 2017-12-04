@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import { ListGroup, ListGroupItem} from 'react-bootstrap';
 
 export default function PostsList ({ posts }) {
-
-
   return (
     <div className='posts-list'>
       <h3 className='subheader'>

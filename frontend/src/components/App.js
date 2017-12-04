@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CategoriesList from './CategoriesList';
-import { fetchCategories, fetchPostsIfNeeded  } from '../actions'
+import { fetchCategories, fetchPostsIfNeeded, selectCategory  } from '../actions'
 import PostsList from './PostsList';
 import { connect } from 'react-redux'
 import { Grid, Row, Col} from 'react-bootstrap';
@@ -10,11 +10,20 @@ import { denormalize, schema } from 'normalizr';
 
 
 class App extends Component {
-
   componentDidMount() {
    const { dispatch, selectedCategory } = this.props
    dispatch(fetchCategories())
    dispatch(fetchPostsIfNeeded(selectedCategory))
+ }
+
+ componentWillReceiveProps(nextProps) {
+   //handle route change
+   const { dispatch, location } = this.props
+   const nextCategory = nextProps.match.params.filter
+   if (nextProps.location.pathname !== location.pathname) {
+     dispatch(selectCategory(nextCategory))
+     dispatch(fetchPostsIfNeeded(nextCategory))
+   }
  }
 
   render() {
@@ -48,7 +57,7 @@ class App extends Component {
         {entities.posts !== null && (
                     <PostsList
                       posts={entities.posts}
-        />)}
+                    />)}
 
       </div>
       </Col>
@@ -58,7 +67,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, entities, selectedCategory }, ownProps) => {
+// To Do add proptypes
+
+const mapStateToProps = ({ categories, entities, selectedCategory, postsCategory }, ownProps) => {
   return {
     categories: categories,
     entities,
