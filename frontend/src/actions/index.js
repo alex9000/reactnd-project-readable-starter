@@ -72,21 +72,30 @@ function normalizePosts(json) {
   return normalizedData;
 }
 
-export function fetchPosts(category) {
-  //console.log("fetchPosts");
+export function fetchAllPosts() {
   return dispatch => {
-    dispatch(requestPosts(category))
+    dispatch(requestPosts('all'))
     return fetch(`http://localhost:3001/posts`,
       { headers: { 'Authorization': 'whatever-you-want' }}
     )
     .then(response => response.json())
     .then(json => normalizePosts(json))
     .then(normalizedPosts => {
-      dispatch(receivePosts(category, normalizedPosts))
-      if (category === 'all'){
-        dispatch(receivePostEntities(normalizedPosts))
-      }
+      dispatch(receivePosts('all', normalizedPosts))
+      dispatch(receivePostEntities(normalizedPosts))
     })
+  }
+}
+
+function fetchPosts(category) {
+  return dispatch => {
+    dispatch(requestPosts(category))
+    return fetch(`http://localhost:3001/${category}/posts`,
+      { headers: { 'Authorization': 'whatever-you-want' }}
+    )
+    .then(response => response.json())
+    .then(json => normalizePosts(json))
+    .then(normalizedPosts => dispatch(receivePosts(category, normalizedPosts)))
   }
 }
 

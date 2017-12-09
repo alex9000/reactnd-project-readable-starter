@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CategoriesList from './CategoriesList';
-import { fetchCategories, fetchPostsIfNeeded, selectCategory  } from '../actions'
+import { fetchCategories, fetchPostsIfNeeded, fetchAllPosts, selectCategory  } from '../actions'
 import PostsList from './PostsList';
 import { connect } from 'react-redux'
 import { Grid, Row, Col} from 'react-bootstrap';
@@ -13,7 +13,7 @@ class App extends Component {
   componentDidMount() {
    const { dispatch, selectedCategory } = this.props
    dispatch(fetchCategories())
-   dispatch(fetchPostsIfNeeded(selectedCategory))
+   dispatch(fetchAllPosts())
  }
 
  componentWillReceiveProps(nextProps) {
